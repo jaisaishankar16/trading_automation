@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Automation & Financial Analysis Dashboard</title>
+    <meta name="description" content="Automated end-to-end pipeline: NSE volume gainers scraping, screener.in annual reports downloading, PDF financial statement parsing, and interactive ROC analysis.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Full-page Blur Wrapper Container -->
+    <div id="main-content">
+        <div class="app-layout">
+            <!-- Top Navbar -->
+            <header class="navbar">
+                <div class="nav-brand">
+                    <div class="brand-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                            <polyline points="16 7 22 7 22 13"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="brand-title">Financial Intelligence &amp; Trading Automation</h1>
+                        <p class="brand-subtitle">NSE Volume Gainers &bull; Screener.in Annual Reports &bull; ROC Analyzer</p>
+                    </div>
+                </div>
+                
+                <div class="nav-actions">
+                    <div class="status-pill" id="engine-status">
+                        <span class="status-dot online"></span>
+                        <span id="status-text">System Ready</span>
+                    </div>
+                    <a href="https://www.screener.in/" target="_blank" rel="noopener noreferrer" class="btn-ghost nav-link">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                        Screener.in
+                    </a>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="main-container">
+                <!-- Alert Banner -->
+                <div id="error-banner" class="alert alert-error hidden" role="alert">
+                    <div class="alert-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <div class="alert-content">
+                        <h4 class="alert-title" id="error-title">Error Encountered</h4>
+                        <p class="alert-desc" id="error-message">Unable to complete request.</p>
+                    </div>
+                    <button type="button" class="alert-close" id="close-error-btn" aria-label="Close error">&times;</button>
+                </div>
+
+                <!-- Pipeline Overview / Summary Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Pipeline Engine</span>
+                            <span class="badge badge-primary">Task 1 + 2 + 3</span>
+                        </div>
+                        <div class="stat-value text-highlight">NSE &bull; Screener &bull; PDF</div>
+                        <div class="stat-meta">Automated End-to-End Extraction</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Analyzed Stocks</span>
+                            <span class="badge badge-neutral" id="filter-badge">Total</span>
+                        </div>
+                        <div class="stat-value" id="symbol-count-display">--</div>
+                        <div class="stat-meta" id="symbol-filter-stat">Awaiting pipeline run</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Calculated ROC</span>
+                            <span class="badge badge-success" id="completed-badge">0 Complete</span>
+                        </div>
+                        <div class="stat-value text-mono" id="roc-count-display">0 / 0</div>
+                        <div class="stat-meta" id="relative-time-display">Auto-selected expenses included</div>
+                    </div>
+                </div>
+
+                <!-- Controls Header: Refresh Data, Download Report, Search -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title-group">
+                            <h2 class="panel-title">Financial Analysis &amp; ROC Table</h2>
+                            <p class="panel-subtitle">Consolidated Balance Sheet &amp; Profit &amp; Loss metrics parsed from Annual Report PDFs</p>
+                        </div>
+
+                        <div class="panel-actions">
+                            <button id="download-report-btn" class="btn btn-secondary" title="Export financial analysis to Excel (.xlsx)" disabled>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                <span>Download Report</span>
+                            </button>
+                            <button id="refresh-btn" class="btn btn-primary" title="Trigger full automated scrape, download, and financial analysis pipeline">
+                                <svg class="refresh-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <polyline points="1 20 1 14 7 14"></polyline>
+                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                                </svg>
+                                <span id="refresh-btn-text">Refresh Data</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Action Toolbar: Search Filter -->
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input type="text" id="search-input" placeholder="Filter by symbol or company name (e.g. BBTC, TIMEX)..." autocomplete="off">
+                            <button type="button" id="clear-search-btn" class="clear-btn hidden">&times;</button>
+                        </div>
+
+                        <div class="toolbar-tools">
+                            <span class="text-muted text-sm" id="table-row-count">Showing 0 records</span>
+                        </div>
+                    </div>
+
+                    <!-- Financial Analysis Data Table -->
+                    <div class="table-container">
+                        <table class="data-table" id="analysis-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 70px;">#</th>
+                                    <th style="width: 140px;">SYMBOL</th>
+                                    <th>Company Name</th>
+                                    <th style="width: 170px;">Capital Employed</th>
+                                    <th style="width: 150px; text-align: center;">Expenses</th>
+                                    <th style="width: 180px;">Operating Profit</th>
+                                    <th style="width: 150px; text-align: right;">ROC (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="analysis-table-body">
+                                <!-- Injected via app.js -->
+                            </tbody>
+                        </table>
+
+                        <!-- Empty State -->
+                        <div id="empty-state" class="state-container">
+                            <div class="empty-icon">
+                                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                            </div>
+                            <h3 class="state-title">No Financial Analysis Data Yet</h3>
+                            <p class="state-desc">
+                                Click <strong>Refresh Data</strong> above to trigger the pipeline: scrape NSE volume gainers, download annual report PDFs from screener.in, and extract financial metrics.
+                            </p>
+                        </div>
+
+                        <!-- No Search Results State -->
+                        <div id="no-results-state" class="state-container hidden">
+                            <h3 class="state-title">No Matching Companies</h3>
+                            <p class="state-desc">No stocks found matching your filter criteria.</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>Trading Automation &amp; Financial Analysis Engine &bull; Built with Flask, Playwright &amp; pdfplumber</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Centered Refresh Confirmation Modal (Direct child of <body>) -->
+    <div id="confirm-refresh-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-refresh-title">
+        <div class="modal-card confirm-card">
+            <h3 id="confirm-refresh-title" class="confirm-title">Refresh Data?</h3>
+            <p class="confirm-desc">This will fetch the latest NSE volume gainers data and analyze annual reports. This may take several minutes. Continue?</p>
+            <div class="modal-actions confirm-actions">
+                <button type="button" id="confirm-refresh-cancel" class="btn btn-secondary">Cancel</button>
+                <button type="button" id="confirm-refresh-ok" class="btn btn-primary">Yes, Refresh</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Centered Full-Page Progress Overlay (Direct child of <body>) -->
+    <div id="progress-overlay" class="progress-overlay hidden">
+        <div class="progress-card">
+            <div class="progress-bar-track">
+                <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+            </div>
+            <div id="progress-percent" class="progress-percent">0%</div>
+            <div id="progress-step" class="progress-step">Starting...</div>
+        </div>
+    </div>
+
+    <!-- Interactive Expense Selection Modal -->
+    <div id="expense-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title" id="modal-title">Select Operating Expenses</h3>
+                    <p class="modal-subtitle" id="modal-subtitle">Symbol: <span class="badge badge-primary" id="modal-symbol-badge">--</span> &bull; <span id="modal-company-name">--</span></p>
+                </div>
+                <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Close dialog">&times;</button>
+            </div>
+
+            <div class="modal-metrics-bar">
+                <div class="metric-pill">
+                    <span class="label">Revenue from Operations:</span>
+                    <span class="value text-highlight" id="modal-revenue-val">—</span>
+                </div>
+                <div class="metric-pill">
+                    <span class="label">Capital Employed:</span>
+                    <span class="value" id="modal-cap-employed-val">—</span>
+                </div>
+                <div class="metric-pill">
+                    <span class="label">Selected Total:</span>
+                    <span class="value text-primary font-mono" id="modal-selected-total-val">0.00</span>
+                </div>
+            </div>
+
+            <div class="modal-controls">
+                <span class="text-sm font-medium">Choose expense items to include in Operating Profit:</span>
+                <div class="btn-group-sm">
+                    <button type="button" id="modal-select-all-btn" class="btn-link">Select All</button>
+                    <span class="divider">&bull;</span>
+                    <button type="button" id="modal-clear-all-btn" class="btn-link">Clear All</button>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div id="modal-expenses-list" class="expense-items-list">
+                    <!-- Checkbox items injected dynamically -->
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="modal-summary-text">
+                    <span>Operating Profit: <strong id="modal-preview-op-profit">—</strong></span>
+                    <span class="mx-2">&bull;</span>
+                    <span>Projected ROC: <strong id="modal-preview-roc" class="text-success">—</strong></span>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="modal-cancel-btn">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="modal-calculate-btn">
+                        <span>Calculate ROC</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Application Script -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
