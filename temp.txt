@@ -1,0 +1,48 @@
+Submissions must be made to audience in CC by November 30 as a 1 slide proposal with a solution brief covering the 5 judgement criteria below. You will be responsible for helping to ensure the solution has market value and provide coaching on the value positioning and fit into our strategy.
+ 
+We will be holding the competition in Q1 of 2027 in order to not compete with year end activities. We are expanding to a SAP practice wide initiative. We've updated the categories and format to drive entry quality and sponsorship.
+ 
+Based on how many submissions we receive, we will determine the format of the play in rounds to reach the championship.
+ 
+Submissions are judged on the following criteria:
+ 
+Originality – Was this really needed
+Maturity – Is this developed and value-add or just a good idea
+Customer Value – Did this need to be developed and did it meet the goal
+Market Value – Will this also be useful for others
+Overall Presentation – How was the idea and value sold to the judges
+ 
+Categories:
+Short Versions:
+Think Big - Expands the art of the possible through bold technical innovation, AI, automation, or new platform capabilities.
+Be Curious - Transforms customer challenges into measurable business outcomes with clear, demonstrable value.
+Better Together - Combines expertise across teams, practices, or technologies to deliver results greater than the sum of their parts.
+ 
+Long Versions:
+Think Big
+Bold innovation that expands what's possible.
+Celebrate breakthrough ideas that push the boundaries of Syniti's capabilities through transformative technology, new platform functionality, AI-powered experiences, automation, or entirely new approaches to solving customer challenges. These are the innovations that make people say, "I didn't know we could do that."
+Examples:
+New AI functionality or intelligent assistants
+Platform extensions or accelerators
+Automation frameworks
+Novel integrations or architectures
+New capabilities that create competitive differentiation
+2. Be Curious
+Innovation that delivers measurable client outcomes.
+Recognize solutions that solve real customer problems and create tangible business value. Whether improving data quality, accelerating timelines, reducing risk, or generating cost savings, these innovations demonstrate how curiosity and problem-solving can move the needle for our clients.
+Examples:
+Data quality insights that drive remediation priorities
+Dashboards that quantify business impact
+Accelerators that reduce project effort or duration
+Solutions that improve adoption, compliance, or decision-making
+Demonstrated cost savings, revenue impact, or risk reduction
+3. Better Together
+The power of collaboration across boundaries.
+Highlight innovations that bring together diverse teams, disciplines, or technologies to achieve outcomes that could not be accomplished independently. These solutions demonstrate how collaboration across practices, functions, geographies, or partner ecosystems creates greater value for customers and Syniti.
+Examples:
+Data Migration and Data Governance working together
+Sales and Delivery co-creating reusable assets
+One SAP Data Team and non-SAP practices collaborating on a customer solution
+Syniti integrations with program management or enterprise tools such as Smartsheet
+Cross-functional frameworks that improve delivery effectiveness and customer outcomes
